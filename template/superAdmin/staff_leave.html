@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">Staff Leaves</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% if messages %}
+                        {% for message in messages %}
+                        {% if message.tags == 'success' %}
+                        <div class="alert alert-success" role="alert">
+                            {{message}}
+                          </div>
+                         {% endif %}
+                         {% if message.tags == 'error' %}
+                         <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Alert!</strong><br/> {{message}}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                         {% endif %}
+                         {% endfor %}
+                         {% endif %}
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-center mb-0" id="table_id">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Leave Date</th>
+                                        <th>Reason</th>
+                                        <th class="text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in leave %}
+                                    <tr>
+                                        <td>{{i.id}}</td>
+                                        <td>{{i.staff_id.admin.first_name}} {{i.staff_id.admin.last_name}}</td>
+                                        <td>{{i.date}}</td>
+                                        <td>{{i.message}}</td>
+                                        <td class="text-right">
+                                            <div class="actions">
+                                                {% if i.status == 0 %}
+                                                <a href="{% url 'staff_approve_leave' i.id %}" class="btn btn-sm bg-success-light">
+                                                    <i class="fas fa-thumbs-up"></i>
+                                                </a>
+                                                <a href="{% url 'staff_disapprove_leave' i.id %}" class="btn btn-sm bg-danger-light">
+                                                    <i class="fas fa-thumbs-down"></i>
+                                                </a>
+                                                {% elif i.status == 1 %}
+                                                <button class="btn btn-success" disabled="disabled"><i class="fas fa-thumbs-up"></i></button>
+                                                {% else %}
+                                                <button class="btn btn-danger" disabled="disabled"><i class="fas fa-thumbs-down"></i></button>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
